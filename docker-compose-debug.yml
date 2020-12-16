@@ -21,12 +21,15 @@ services:
       dockerfile: Dockerfile_debug
     ports:
       - "18080:8080"
+      - "5005:5005"
     depends_on:
       db:
         condition: service_healthy
     networks:
       - test
     command: java -Djava.security.egd=file:/dev/./urandom -jar /project/target/demo-0.0.1-SNAPSHOT.jar
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 
   db:
     image: opavlova/db-mysql:5.7-test
